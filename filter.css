@@ -1,0 +1,7 @@
+.clickbait {
+  filter:blur(5px);
+}
+
+.clickbait:hover {
+  filter:blur(0px);
+}

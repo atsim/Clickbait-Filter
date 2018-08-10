@@ -4,7 +4,7 @@ let running = false;
 let skip = false;
 
 var observer = new MutationObserver(callback);
-var buzzwords = ['amazing', 'must watch', 'not believe', 'super lucky', 'crazy']
+//var buzzwords = ['amazing', 'must watch', 'not believe', 'super lucky', 'crazy']
 
 
 observer.observe(document.getElementById("contents"), {
@@ -19,44 +19,38 @@ function callback(mutations) {
   running = true;
   let pathname = window.location.pathname;
   let nameCheck = '';
-  $("ytd-thumbnail").each(function (index) {
-    if (pathname == '/results') {
-      nameCheck = $("ytd-thumbnail").eq(index).next().children().first().children().first().children().first().children().eq(1);
-    } else if (!$("ytd-thumbnail").eq(index).next().children().first().children().eq(1).is("span")){
-      // console.log($("ytd-thumbnail").eq(index).next().children().first().children().first().children().eq(1).text());
-      nameCheck = $("ytd-thumbnail").eq(index).next().children().first().children().first().children().eq(1);
-    } else {
-      skip = true;
-    }
 
-    if (skip == false) {
-    let numUpper = (nameCheck.text().match(/[A-Z]/g)).length;
-    //console.log(numUpper);
-    let titleRatio = numUpper/nameCheck.text().match(/[a-zA-Z]/g).length;
-    //let buzzwordsCheck = /.*(amazing|must watch|not believe|super lucky|crazy).*/.test(nameCheck.toLowerCase());
+  $('[id="video-title"]').each(function (index) {
+    nameCheck = $('[id="video-title"]')[index];
 
-    // Check if title fits clickbait criteria
-    if (nameCheck.text() != "" && (titleRatio >= ratio) && nameCheck.attr("data-clickbait") != 'true') {
-      console.log("Added append to: " + nameCheck.text())
-      nameCheck.text("(Clickbait) " + nameCheck.text());
-      nameCheck.attr("data-clickbait", 'true');
-      $("ytd-thumbnail").eq(index).addClass("clickbait");
+    if (nameCheck.nodeName == 'A') {
+      let numUpper = 0;
+      let titleRatio = 0;
+      if (nameCheck.title.match(/[A-Z]/g) != null) {
+        numUpper = (nameCheck.title.match(/[A-Z]/g)).length;
+        titleRatio = numUpper / nameCheck.title.match(/[a-zA-Z]/g).length;
+      }
+
+      // Check if title fits clickbait criteria
+      if (nameCheck.title != "" && (titleRatio >= ratio) && !nameCheck.hasAttribute("data-clickbait")) {
+        console.log("Added append to: " + nameCheck.title);
+        nameCheck.innerText = "(Clickbait) " + nameCheck.title;
+        nameCheck.setAttribute("data-clickbait", 'true');
+
+        // Select thumbnail element
+        let thumbnail = '';
+        if (pathname == '/results') {
+          //console.log(nameCheck.parentElement.parentElement.parentElement.parentElement.previousElementSibling);
+          thumbnail = nameCheck.parentElement.parentElement.parentElement.parentElement.previousElementSibling;
+          thumbnail.className += " clickbait";
+        } else {
+          thumbnail = nameCheck.parentElement.parentElement.parentElement.previousElementSibling;
+          thumbnail.className += " clickbait";
+        }
+      }
     }
-  }
-    
   });
+
   running = false;
   skip = false;
 }
-
-chrome.history.onVisited.addListener(function(details) {
-  console.log("URL Updated");
-  if(details.frameId === 0) {
-    // Fires only when details.url == currentTab.url
-    chrome.tabs.get(details.tabId, function(tab) {
-      if(tab.url === details.url) {
-        console.log("onHistoryStateUpdated");
-      }
-    });
-  }
-});

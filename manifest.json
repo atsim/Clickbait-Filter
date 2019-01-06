@@ -3,13 +3,16 @@
 
     "name": "YouTube Clickbait Filter",
     "description": "This extension identifies any potential click bait videos on the youtube homescreen and result page of searches",
-    "version": "1.0.0",
+    "version": "0.9.0",
 
     "browser_action": {
         "default_title": "YouTube Clickbait Filter",
         "default_popup": "options.html"
     },
     "icons": {
+        "16": "images/icon.png",
+        "48": "images/icon.png",
+        "128": "images/icon.png"
     },
     "permissions": [
         "storage", "tabs", "history", "*://youtube.com/*"

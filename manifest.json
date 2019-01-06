@@ -14,11 +14,14 @@
     "permissions": [
         "storage", "tabs", "history", "*://youtube.com/*"
     ],
-    "options_page": "options.html",
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": false
+    },
     "content_scripts": [
         {
             "matches": ["https://www.youtube.com/*"],
-            "js": ["vendor/jquery/jquery.js", "filter.js", "back.js"],
+            "js": ["vendor/jquery/jquery.js", "filter.js"],
             "css":["filter.css"]
         }
     ]

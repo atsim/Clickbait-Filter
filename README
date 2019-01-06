@@ -1,5 +1,4 @@
 TO DO:
-1. Add option for users to set their own uppercase threshold for videos to be marked clickbait
+1. Fix async issue while grabbing user set threshold
 2. Add option for users to add/remove words or phrases that should be filtered
-3. Make videos dynamically loaded from scrolling go through the filter function
-4. Detect URL change so all titles on new page go through filter
+3. Detect URL change so all titles on new page go through filter

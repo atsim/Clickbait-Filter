@@ -1,31 +1,29 @@
 let ratio = 0.75;
+let running = false;
+let skip = false;
+let pathname = window.location.pathname;
 
-
+// Get user set threshold if it exists
 chrome.storage.sync.get("threshold", function(obj) {
-  console.log(obj);
-  console.log(!Object.keys(obj).length === 0);
-  console.log("Saved threshold: " + obj.threshold);
   if (Object.keys(obj).length !== 0) {
     ratio = parseFloat(obj.threshold);
   }
-  console.log("RATIO: " + ratio);
+  startFilter();
 });
-console.log("RATIO: " + ratio);
-let running = false;
-let skip = false;
 
-var observer = new MutationObserver(callback);
-observer.observe(document.getElementById("contents"), {
+function startFilter() {
+  var observer = new MutationObserver(callback);
+  observer.observe(document.getElementById("contents"), {
     childList: true,
-    subtree: true            
-});
+    subtree: true
+  });
+}
 
 function callback(mutations) {
   if (running) {
     return;
   }
   running = true;
-  let pathname = window.location.pathname;
   let nameCheck = '';
 
   $('[id="video-title"]').each(function (index) {
@@ -41,7 +39,6 @@ function callback(mutations) {
 
       // Check if title fits clickbait criteria
       if (nameCheck.title != "" && (parseFloat(titleRatio) >= parseFloat(ratio)) && !nameCheck.hasAttribute("data-clickbait")) {
-        console.log("Added append to: " + nameCheck.title);
         nameCheck.innerText = "(Clickbait) " + nameCheck.title;
         nameCheck.setAttribute("data-clickbait", 'true');
 
@@ -61,3 +58,5 @@ function callback(mutations) {
   running = false;
   skip = false;
 }
+
+// Run the filter function again if user goes to a new page

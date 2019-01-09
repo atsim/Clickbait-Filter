@@ -1,4 +1,3 @@
 TO DO:
-1. Fix async issue while grabbing user set threshold
-2. Add option for users to add/remove words or phrases that should be filtered
-3. Detect URL change so all titles on new page go through filter
+1. Add option for users to add/remove words or phrases that should be filtered
+2. Detect URL change so all titles on new page go through filter
